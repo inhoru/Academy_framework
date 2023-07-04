@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Maper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="student">
+	<!-- 실행할 sql문에 맞는 태그를 선언하면됨.
+	<select>,<insert>,<update>,<delect>
+	sql문은 시작태그와 끝태그 사이에 작성  ; 를 작성하지 않는다. -->
+	<insert id="insertStudent">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,'유병승','01012341234','YOO@YOO.COM','경기도시흥시',DEFAULT)
+	</insert>
+	
+	<!-- 메소드실행시 매개변수가 있는 경우에 sql태그에 parameterType속성을 이용해서
+	매개변수 타입을 설정  
+	파라미터값은 #{매개변수명}로 전달받을 수 있다.
+	-->
+	<!-- preparedStatement 쓰는거랑 똑같다 즉 위치홀더를 쓴거랑 같은거다 -->
+	<insert id="insertStudentByName" parameterType="string">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,#{name},'01012341234','YOO@YOO.COM','경기도시흥시',DEFAULT)
+	</insert>
+	<!-- type을 작성할때 클래스를 작성하려면 패키지명까지 작성을 해야한다. -->
+	<insert id="insertStudentAll" parameterType="com.mybatis.model.vo.Student">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,#{studentName},#{studentTel},#{studentEmail},#{studentAddress},DEFAULT)
+	</insert>
+	
+	<update id="updateStudent" parameterType="com.mybatis.model.vo.Student">
+		UPDATE STUDENT SET STUDENT_NAME=#{studentName},STUDENT_TEL=#{studentTel} ,STUDENT_EMAIL=#{studentEmail},STUDENT_ADDR=#{studentAddress} WHERE STUDENT_NO=#{studentNo}
+	</update>
+	<delete id="deleteStudent" parameterType="_int">
+		DELETE FROM STUDENT WHERE STUDENT_NO =#{studentNo}
+	</delete>
+	
+	<!-- select문 실행하기
+	<select>태그를 이용하고
+	반드시 두개의 속성을 작성을하자.
+	1. id -> sql문을 지칭하는 값
+	2. resultType||resultMap -> 쿼리문의 실행결과를 반환할 타입을 지정
+	 resultType : java코드로 작성되어있는 타입(기본,클래스타입) 
+	 resultMap : mybatis에서 <resultMap>을 이용해서 만든 타입
+	 * 컬럼명과 매핑할 java클래스 필드명이 같으면 resultType 다르면 resultMap만들어서 직접 매핑해줌.
+	 클래스간에 연관관계를 설정했을때(has a)사용 -->
+	 
+	 <select id="selectStudentCount" resultType="_int">
+	 	SELECT COUNT(*) FROM STUDENT
+	 </select>
+	 <!-- 
+	 vo객체와 resultest의 컬럼명 불일치할때 resultMap을 이용해서 맵핑 시켜줄수있다.
+	 <resultMap id="구분" type="">
+		 <id property="type에설정된 객체의 필드명" column="resultset컬럼명"> 
+		 <result> 
+		 //has a관게를 사용할떄
+		 <associtation>
+		 //리스트로객체를가지고있을때 
+		 <collection> 
+	 -->
+	 <resultMap type="com.mybatis.model.vo.Student" id="studentMap">
+	 	<id property="studentNo" column="student_no"/>
+	 	<result property="studentName" column="student_name"/>
+	 	<result property="studentTel" column="student_tel"/>
+	 	<result property="studentEmail" column="student_email"/>
+	 	<result property="studentAddress" column="student_addr"/>
+	 </resultMap>
+	 
+	 <!-- 자바의객체에있는 이름을 매칭하기때문에 컬럼 명을 자바객체의 이름으로 바꿔준다. -->
+	<select id="selectStudent" resultMap="studentMap" parameterType="_int">
+		<!-- SELECT STUDENT_NO AS STUDENTNO,STUDENT_NAME AS STUDENTNAME ,STUDENT_TEL AS STUDENTTEL,STUDENT_EMAIL AS STUDENTEMAIL,STUDENT_ADDR AS STUDENTADDRESS,REG_DATE 
+		 FROM STUDENT WHERE STUDENT_NO=#{no} -->
+		 SELECT * FROM STUDENT WHERE STUDENT_NO=#{no}
+	</select>
+	
+	<select id="selectStudentAll" resultMap="studentMap">
+		 SELECT * FROM STUDENT
+	</select>
+	
+
+</mapper>
