@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.employee.model.dao.EmpDao;
 import com.employee.model.dao.EmpDaoImpl;
+import com.employee.model.vo.Department;
 import com.employee.model.vo.Employee;
 
 public class EmpServiceImpl implements EmpService {
@@ -39,6 +40,13 @@ public class EmpServiceImpl implements EmpService {
 		int result=dao.selectEmployeeCount(session);
 		session.close();
 		return result;
+	}
+	@Override
+	public List<Department> selectAllDept(){
+		SqlSession session=getSession();
+		List<Department> list=dao.selectAllDept(session);
+		session.close();
+		return list;
 	}
 
 	

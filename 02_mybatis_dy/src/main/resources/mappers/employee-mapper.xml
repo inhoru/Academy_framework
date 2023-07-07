@@ -4,23 +4,43 @@
 
 <mapper namespace="employee">
 	<resultMap id="employeeMap" type="emp">
-<id property="empId" column="emp_id"/>
-<result property="empName" column="emp_name"/>
-<result property="empNo" column="emp_no"/>
-<result property="deptCode" column="dept_code"/>
-<result property="jobCode" column="job_code"/>
-<result property="salLevel" column="sal_level"/>
-<result property="managerId" column="manager_id"/>
-<result property="hireDate" column="hire_date"/>
-<result property="entDate" column="ent_date"/>
-<result property="entYn" column="ent_yn"/>
-</resultMap>
+		<!-- 1:1관계 -> association 태그를 이용해서 연결 result태그의 마지막사용 id태그가 설정되어있어야 한다. -->
+		<id property="empId" column="emp_id" />
+		<result property="empName" column="emp_name" />
+		<result property="empNo" column="emp_no" />
+		<!-- <result property="deptCode" column="dept_code"/> -->
+		<result property="jobCode" column="job_code" />
+		<result property="salLevel" column="sal_level" />
+		<result property="managerId" column="manager_id" />
+		<result property="hireDate" column="hire_date" />
+		<result property="entDate" column="ent_date" />
+		<result property="entYn" column="ent_yn" />
+		<result property="email" column="email" />
+		<result property="phone" column="phone" />
+		<result property="bonus" column="bonus" />
+		<result property="salary" column="salary" />
+		<association property="dept" resultMap="departmentMap" />
+	</resultMap>
+	
+	<resultMap id="departmentMap" type="department">
+		<id property="deptId" column="dept_id" />
+		<result property="deptTitle" column="dept_title" />
+		<result property="locationId" column="location_id" />
+		<!-- 1:다 관계일때 -->
+		<collection property="employees" resultMap="employeeMap" />
+	</resultMap>
+	
+	<select id="selectAllDept" resultMap="departmentMap">
+		SELECT * FROM DEPARTMENT LEFT JOIN EMPLOYEE ON DEPT_CODE=DEPT_ID
+	</select>
+	
 	<select id="selectEmployeeCount" resultType="_int">
 		SELECT COUNT(*) FROM
 		EMPLOYEE
 	</select>
 	<select id="selectAllemp" resultMap="employeeMap">
-		SELECT * FROM EMPLOYEE
+		SELECT * FROM EMPLOYEE JOIN
+		DEPARTMENT ON DEPT_CODE = DEPT_ID
 	</select>
 	<!-- 파라미터값을 가져올때 #{} : setType()값을 대입 -> 자료형에 맞는 리터럴을 대입 ${} : 문자열을 처리하는 
 		표현 -->
@@ -30,28 +50,28 @@
 		DECODE(SUBSTR(EMP_NO,8,1),'1','M','2','F','3','M','4','F') AS GENDER
 		FROM EMPLOYEE E)
 		<where>
-		<!-- <trim prefix="WHERE" prefixOverrides="AND|OR"> -->
-		<if test="keyword!=null and keyword!=''"> AND ${type} LIKE '%'||#{keyword}||'%' </if>
-		<if test="gender!=null and gender!=''"> AND GENDER = #{gender} </if>
-		<if
-			test="salFlag!=null and salFlag!='' and salary!=null and salary!=0">
-			<!-- <if test="salFlag eq 'ge'"> AND SALARY &gt;= #{salary} </if> <if 
-				test="salFlag == 'le'"> AND SALARY <![CDATA[<=]]> #{salary} AND SALARY &lt;= 
-				#{salary} </if> -->
-			<choose>
-				<when test="salFlag == 'le'"> AND SALARY &lt; #{salary} </when>
-				<otherwise> AND SALARY >= #{salary} </otherwise>
-			</choose>
-		</if>
-		<if test="deptCodes!=null and deptCodes!=''">
-			AND DEPT_CODE IN 
-			<!-- foreach문을 사용할 수 있다 속성 collection : 배열방식의 데이터 item : 배열의 데이터를 저장하는 
-				변수명 open : 반복을 시작할때 출력할 값을 설정 close : 반복을 끝냈을때 출력할 값을 설정 separator : 반복할때마다 
-				출력할 값을 설정 index : 배열의 인덱스번호를 저장하는 변수 -->
-			<foreach collection="deptCodes" open="(" close=")"
-				separator="," item="d"> #{d} </foreach>
-		</if>
-		<!-- </trim> -->
+			<!-- <trim prefix="WHERE" prefixOverrides="AND|OR"> -->
+			<if test="keyword!=null and keyword!=''"> AND ${type} LIKE '%'||#{keyword}||'%' </if>
+			<if test="gender!=null and gender!=''"> AND GENDER = #{gender} </if>
+			<if
+				test="salFlag!=null and salFlag!='' and salary!=null and salary!=0">
+				<!-- <if test="salFlag eq 'ge'"> AND SALARY &gt;= #{salary} </if> <if 
+					test="salFlag == 'le'"> AND SALARY <![CDATA[<=]]> #{salary} AND SALARY &lt;= 
+					#{salary} </if> -->
+				<choose>
+					<when test="salFlag == 'le'"> AND SALARY &lt; #{salary} </when>
+					<otherwise> AND SALARY >= #{salary} </otherwise>
+				</choose>
+			</if>
+			<if test="deptCodes!=null and deptCodes!=''">
+				AND DEPT_CODE IN
+				<!-- foreach문을 사용할 수 있다 속성 collection : 배열방식의 데이터 item : 배열의 데이터를 저장하는 
+					변수명 open : 반복을 시작할때 출력할 값을 설정 close : 반복을 끝냈을때 출력할 값을 설정 separator : 반복할때마다 
+					출력할 값을 설정 index : 배열의 인덱스번호를 저장하는 변수 -->
+				<foreach collection="deptCodes" open="(" close=")"
+					separator="," item="d"> #{d} </foreach>
+			</if>
+			<!-- </trim> -->
 		</where>
 	</select>
 </mapper>

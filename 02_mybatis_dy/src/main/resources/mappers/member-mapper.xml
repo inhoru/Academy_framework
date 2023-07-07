@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+
+	<resultMap id="boardMap" type="board">
+		<id property="boardNo" column="BOARD_NO" />
+		<result property="boardTitle" column="BOARD_TITLE" />
+<!-- 		<result property="boardWriter" column="BOARD_WRITER" /> -->
+		<result property="boardContent" column="BOARD_CONTENT" />
+		<result property="boardOriginalFileName" column="BOARD_ORIGINAL_FILENAME" />
+		<result property="boardRenamedFileName" column="BOARD_RENAMED_FILENAME" />
+		<result property="boardDate" column="BOARD_DATE" />
+		<result property="boardReadcount" column="BOARD_READCOUNT" />
+		<association property="boardWriter" resultMap="memberMap" />
+		<!--resultMap대신 ofType사용하가능  -->
+		<!--collection안에 resultMao설정가능  -->
+		<!--한번만쓸때면 이렇게써도 되고 다른곳에서는 사용이불가능  -->
+		<collection property="boardComment" ofType="boardComment" >
+			<id property="boardCommentNo" column="BOARD_COMMENT_NO" />
+			<result property="boardCommentLevel" column="BOARD_COMMENT_LEVEL" />
+			<!-- <result property="boardCommentWriter" column="BOARD_COMMENT_WRITER" /> -->
+			<result property="boardCommentContent" column="BOARD_COMMENT_CONTENT" />
+			<result property="boardRef" column="BOARD_REF" />
+			<result property="boardCommentRef" column="BOARD_COMMENT_REF" />
+			<result property="boardCommentDate" column="BOARD_COMMENT_DATE" />
+			<association property="boardCommentWriter" resultMap="memberMap" />
+		</collection>
+	</resultMap>
+	
+	<resultMap id="memberMap" type="member">
+		<id property="userId" column="userId" />
+		<result property="password" column="password" />
+		<result property="userName" column="userName" />
+		<result property="gender" column="gender" />
+		<result property="age" column="age" />
+		<result property="email" column="email" />
+		<result property="phone" column="phone" />
+		<result property="address" column="address" />
+		<result property="hobby" column="hobby" typeHandler="strArrType"/>
+		<result property="enrollDate" column="enrollDate" />
+	</resultMap>
+	
+	
+	<!-- <resultMap id="boardCommentMap" type="boardComment">
+		<id property="boardCommentNo" column="BOARD_COMMENT_NO" />
+		<result property="boardCommentLevel" column="BOARD_COMMENT_LEVEL" />
+		<result property="boardCommentWriter" column="BOARD_COMMENT_WRITER" />
+		<result property="boardCommentContent" column="BOARD_COMMENT_CONTENT" />
+		<result property="boardRef" column="BOARD_REF" />
+		<result property="boardCommentRef" column="BOARD_COMMENT_REF" />
+		<result property="boardCommentDate" column="BOARD_COMMENT_DATE" />
+	
+	</resultMap>
+	 -->
+	
+	
+	
+	
+	<select id="memberList" resultType="map">
+		SELECT * FROM MEMBER
+	</select>
+	
+	 <select id="selectBoardAll" resultMap="boardMap" parameterType="_int" >
+		SELECT * FROM BOARD 
+		LEFT JOIN BOARD_COMMENT ON BOARD_NO=BOARD_REF 
+		JOIN MEMBER ON USERID=BOARD_WRITER 
+		JOIN MEMBER M ON BOARD_COMMENT_WRITER=M.USERID
+		WHERE BOARD_NO=#{no}
+	</select>
+</mapper>
