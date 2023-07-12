@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev">
+	<resultMap id="demoMap" type="demo">
+		<!--devLang만 써도되지만 나주엥 1:1 1:다 관게일땐 다써줘야한다.  -->
+		<id property="devNo" column="devNo" />
+		<result property="devName" column="devName" />
+		<result property="devAge" column="devAge" />
+		<result property="devGender" column="devGender" />
+		<result property="devLang" column="devLang"
+			typeHandler="strArr" />
+	</resultMap>
+
+	<insert id="insertDemo" parameterType="demo">
+		INSERT INTO DEV
+		VALUES(SEQ_DEV_NO.NEXTVAL,#{devName},#{devAge},#{devEmail},#{devGender},#{devLang,
+		<!--타입핸들어없이 for문을 이용해서 도 배열을 입력해줄수있다. -->
+		<!-- <foreach item="l" collection="devLang" open="'" close="'" separator=",">${l}</foreach> -->
+		typeHandler=strArr})
+	</insert>
+
+	<select id="selectDemoAll" resultMap="demoMap">
+		SELECT * FROM DEV
+	</select>
+	
+	<select id="selectDemoNo" resultMap="demoMap" parameterType="_int">
+		SELECT * FROM DEV WHERE DEVNO=#{no}
+	</select>
+	 <update id="updateDemo" parameterType="demo">
+		UPDATE DEV SET DEVNAME=#{devName},DEVAGE=#{devAge},DEVEMAIL=#{devEmail},DEVGENDER=#{devGender},DEVLANG=#{devLang,typeHandler=strArr} WHERE DEVNO=#{devNo}
+	</update> 
+</mapper>
