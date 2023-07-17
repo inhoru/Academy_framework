@@ -41,11 +41,12 @@ public class MemberController {
 	
 	//@RequestMapping(value="/member/insertMember.do", method=RequestMethod.POST)
 	@PostMapping("/insertMember.do")
-	public String insertMember(@Validated Member m,BindingResult bindResult, Model model) {
+	public String insertMember(@Validated Member m, BindingResult isResult, Model model) {
 		
-		if(bindResult.hasErrors()) {
+		if(isResult.hasErrors()) {
 			return "member/enrollMember";
 		}
+		
 		
 		//패스워드를 암호화해서 처리하자.
 		String oriPassword=m.getPassword();
@@ -104,6 +105,10 @@ public class MemberController {
 	public String logout(SessionStatus status) {
 //		if(session!=null)
 //			session.invalidate();
+		
+//		afterThrowinglogger 테스트를위한 오류만들기
+//		if(1==1)throw new IllegalArgumentException("잘못된 접근입니다.!");
+		
 		
 		if(!status.isComplete()) status.setComplete();
 		

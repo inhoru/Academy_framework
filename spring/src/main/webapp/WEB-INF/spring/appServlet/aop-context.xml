@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 	
 	<!-- xml방식으로 aop적용하기 -->
-	<bean id="loggerAspect" class="com.bs.spring.common.aop.LoggerAspect"/>
+	<!-- <bean id="loggerAspect" class="com.bs.spring.common.aop.LoggerAspect"/>
 	
 	<aop:config>
 		<aop:aspect ref="loggerAspect">
@@ -15,6 +15,10 @@
 			<aop:after method="loggerAfter" pointcut-ref="logPointcut"/>
 		</aop:aspect>
 	</aop:config>
+	 -->
+	<!--annotation방식으로 AOP적용하기  -->
+	<!--aspectj-autoproxy태그가 있어야지만 어노테이션 으로 AOP를 사용할수가있다. 반드시 태그를 설정해줘야한다.  -->
+	<aop:aspectj-autoproxy/>
 	
 	
 		

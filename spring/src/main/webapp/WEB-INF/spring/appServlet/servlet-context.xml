@@ -99,6 +99,10 @@
 			<mapping path="/memo/*"/>
 			<beans:ref bean="admincheck"/>
 		</interceptor> -->
+		<interceptor>
+			<mapping path="/board/*"/>
+			<beans:ref bean="loginCheck"/>
+		</interceptor>
 	</interceptors>
 	
 	<beans:bean id="admincheck" 

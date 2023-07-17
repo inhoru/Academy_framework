@@ -20,6 +20,7 @@ import com.bs.spring.beantest.Employee;
 // -> @Configuration어노테이션이용 
 
 @Configuration
+@EnableWebMvc// WebMvc에필요한 설정들을 해준다
 @ComponentScan(basePackages = "com.bs.spring",
 		includeFilters = {
 			@ComponentScan.Filter(

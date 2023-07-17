@@ -9,4 +9,5 @@ import com.bs.spring.member.model.dto.Member;
 public interface MemberDao {
 	int insertMember(SqlSession session,Member m);
 	Member selectMemberById(SqlSession session,Map param);
+	
 }
