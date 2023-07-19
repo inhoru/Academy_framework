@@ -1,5 +1,6 @@
 package com.bs.spring.member.model.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -26,5 +27,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member selectMemberById(Map param) {
 		return dao.selectMemberById(session,param);
+	}
+
+	@Override
+	public List<Member> selectAll() {
+		return dao.selectAll(session);
 	}
 }

@@ -44,6 +44,8 @@
 			</form> --%>
 			<springform:form modelAttribute="member" name="memberEnrollFrm" action="${path }/member/insertMember.do" method="post" >
 				<springform:input path="userId" type="text" class="form-control" placeholder="아이디 (4글자이상)" name="userId" id="userId_"/>
+				<button type="button" class="btn btn-outline-danger" onclick="duplication(userId_);">중복확인</button>
+				<span id="result"></span>
 				<springform:errors path="userId" cssClass="error"/>
 				<springform:input path="password" type="password" class="form-control" placeholder="비밀번호" name="password" id="password_"/>
 				<springform:errors path="password" cssClass="error"/>
@@ -76,6 +78,40 @@
 				<input type="reset" class="btn btn-outline-success" value="취소">
 			</springform:form>
 		</div>
+		<script>
+			const duplication=()=>{
+				const userId = $("#userId_").val();
+				if(userId.trim().length>=4){
+				$.get('${path}/ajax/duplication.do?userId='+userId,(data)=>{
+					console.log(data)
+					if(data.length === 0){
+					$("#result").html("<h2>중복아님 ㅋㅋ</h2>");
+					}else{						
+					$("#result").html("<h2>중복임 ㅋㅋ</h2>");						
+					}
+				})
+				}else{
+					alert("userId는 4글자 이상 입력하세요!");	
+				}
+			}
+			
+			/*포스트방식  */
+			/* onst duplication=()=>{
+				const userId=$("#userId_").val();
+				if(userId.trim().length>=4){
+					$.post("${path}/ajax/duplication.do",{"userId":$("#userId_").val()},data=>{
+						if(data==null){
+							$("#result").html("<h2>중복아님 ㅋㅋ</h2>");
+						}else{
+							$("#result").html("<h2>중복임 ㅋㅋ</h2>");	
+						}
+					});
+				}else{
+					alert("userId는 4글자 이상 입력하세요!");
+				}
+			} */
+		
+		</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 
 

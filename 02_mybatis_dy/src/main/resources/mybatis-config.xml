@@ -12,6 +12,8 @@
 		<typeAlias type="com.employee.model.vo.BoardComment" alias="boardComment" />
 		<typeAlias type="com.employee.model.vo.Member" alias="member" />
 		<typeAlias type="com.employee.common.StringArrayTypeHandler" alias="strArrType" />
+		
+ 
 	</typeAliases>
 	<environments default="BS">
 		<environment id="BS">
@@ -26,6 +28,7 @@
 				<property name="password" value="${pw}" />
 			</dataSource>
 		</environment>
+		
 		<environment id="web">
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
@@ -35,6 +38,7 @@
 				<property name="password" value="WEB" />
 			</dataSource>
 		</environment>
+	
 	</environments>
 
 	<mappers>

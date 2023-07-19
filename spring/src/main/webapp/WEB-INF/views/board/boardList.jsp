@@ -8,7 +8,7 @@
 	<jsp:param name="title" value="게시판"/>
 </jsp:include>
 <section id="board-container" class="container">
-        <p>총 ${totalContents }건의 게시물이 있습니다.</p>
+        <p>총 ${totalData }건의 게시물이 있습니다.</p>
         <button  onclick="location.assign('${path}/board/boardWriteMove.do');">글쓰기</button>
         
         <table id="tbl-board" class="table table-striped table-hover">
@@ -23,12 +23,17 @@
             <c:forEach var="b" items="${board }">
            
            <tr>
-                <th><c:out value="${b.boardNo }"/></th>
-                <th><a href="${path }/board/boardInfo.do?no=${b.boardNo}"><c:out value="${b.boardTitle }"/></a></th>
-                <th><c:out value="${b.boardWriter }"/></th>
-                <th><c:out value="${b.boardDate }"/></th>
-                <th></th>
-                <th><c:out value="${b.boardReadCount }"/></th>
+                <td><c:out value="${b.boardNo }"/></td>
+                <td><a href="${path }/board/boardInfo.do?no=${b.boardNo}"><c:out value="${b.boardTitle }"/></a></td>
+                <td><c:out value="${b.boardWriter.userId }"/></td>
+                <td><c:out value="${b.boardDate }"/></td>
+                <td>
+                	<c:if test="${not empty b.file }">
+                		<img src="${path }/resources/images/file.png" alt="첨부파일사진">
+                		<span>${b.file.size() }</span>
+                	</c:if>
+                </td>
+                <td><c:out value="${b.boardReadCount }"/></td>
             </tr>
             </c:forEach>
             
