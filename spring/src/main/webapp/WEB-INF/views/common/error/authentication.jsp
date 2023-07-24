@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h3 style="color:red"><%=exception.getMessage() %></h3>
+	<h3 style="color:red"><%=exception!=null ? exception.getMessage():"접근권한이없습니다." %></h3>
 	<h4>접글불가능이다람쥐</h4>
 	<script>
 		setTimeout(()=>{

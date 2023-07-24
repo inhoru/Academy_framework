@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bs.spring.board.model.dto.Board;
+import com.bs.spring.common.exception.AuthenticationException;
 import com.bs.spring.member.model.dto.Member;
 import com.bs.spring.member.model.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,9 +64,11 @@ public class AjaxController {
 	public String basic2() {
 		return "demo/demo";
 	}
+	
 	@GetMapping("/selectAll")
 	@ResponseBody
 	public List<Member> selectAll() {
+		if(1==1) throw new AuthenticationException("권환에러발생!");
 		return service.selectAll();
 	}
 	
@@ -75,5 +78,31 @@ public class AjaxController {
 		log.info("{}",m);
 		return m;
 	}
+	
+	//REST API, RESTFul -> session,Cookie관리안해!(stateless)
+	//URL을 설정할때 간편하게 서비스를 알아볼 수 있는 방식으로 구현하자
+	//URL주소를 설정을할때 행위에 대한 표현을 뺴자 -> method를 보고 결정하자.
+	//method
+	//GET :  Data를 조회 서비스는 GET
+	//POST :  Data를 저장하는 서비스
+	//PUT :  Data를 수정하는 서비스
+	//DELETE :  Data를 삭제하는 서비스
+	//URL설정할때는 명사로 작석을한다.
+	// 예) 회원을 관리하는 서비스
+	// GET localhost:9090/spring/member -> 전체회원조회
+	// GET localhost:9090/spring/member/{id}1||admin -> 회원 1명 조회
+	// POST localhost:9090/spring/member -> 회원추가
+	// PUT localhost:9090/spring/member -> 회원수정
+	// DELETE localhost:9090/spring/member -> 회원삭제
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

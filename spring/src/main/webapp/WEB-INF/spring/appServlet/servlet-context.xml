@@ -118,6 +118,17 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+	
+	<!-- 웹소켓 서버 설정하기 -->
+	<beans:bean id="chatting" class="com.bs.spring.common.websocket.ChattingServer"/>
+	
+	<websocket:handlers>
+		<!--빈에 등록한 chatting객체를 이용해서사용한다.  -->
+		<websocket:mapping handler="chatting" path="/chatting"/>
+		<websocket:handshake-interceptors>
+			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
 
 
 

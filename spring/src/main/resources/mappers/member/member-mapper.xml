@@ -4,11 +4,12 @@
 
 	<resultMap id="memberMap" type="member">
 		<result property="hobby" column="hobby" typeHandler="strArr"/>
+		<result property="name" column="userName"/>
 	</resultMap>
 
 	<insert id="insertMember" parameterType="member">
 		INSERT INTO MEMBER VALUES(#{userId},
-		#{password},#{userName},#{gender},#{age},#{email},
+		#{password},#{name},#{gender},#{age},#{email},
 		#{phone},#{address},#{hobby,typeHandler=strArr},DEFAULT)
 	</insert>
 	<select id="selectById" resultMap="memberMap" parameterType="map">

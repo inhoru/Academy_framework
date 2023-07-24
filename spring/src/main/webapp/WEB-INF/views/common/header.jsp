@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <c:set var="path" value="${pageContext.request.contextPath }"/>
+<c:set var="loginInfo" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal }"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +25,10 @@
 </head>
 <body>
 	<div id="container">
+		<p>
+			시큐리티에 저장된 로그인정보 확인하기
+			${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal }<br/>
+		</p>
 		<header>
 			<div id="header-container">
 				<h2>${param.title }</h2>
@@ -57,19 +62,25 @@
 						</li>
 						
 					</ul>
-					<c:if test="${loginMember!=null }">
+<%-- 					<c:if test="${loginMember!=null }"> --%>
+					<c:if test="${loginInfo!=null}">
 						<span>
-							<a href="${path }/member/mypage.do?userId=${loginMember.userId}">
-								<c:out value="${loginMember.userName }"/>
+							<a href="${path }/member/mypage.do?userId=${loginInfo.name}">
+								<c:out value="${loginInfo.name }"/>
 							</a>
 							님 환영합니다.
 						</span>
+						<button class="btn btn-outline-primary my-2 my-sm-0"
+						onclick="chattingOpen();">
+							채팅하기
+						</button>
 						<button class="btn btn-outline-dark my-2 my-sm-0"
-						onclick="location.replace('${path}/member/logout.do');">
+						onclick="location.replace('${path}/seculogout.do');">
 							로그아웃
 						</button>
 					</c:if>
-					<c:if test="${loginMember==null }">
+					<%-- <c:if test="${loginMember==null }"> --%>
+					<c:if test="${loginInfo==null}">
 						<button class="btn btn-outline-success my-2 my-sm-0"
 						data-toggle="modal" data-target="#loginModal">로그인</button>
 						&nbsp;
@@ -92,7 +103,7 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<form action="${path }/member/login.do" method="post">
+					<form action="${path }/loginEnd" method="post">
 						<div class="modal-body">
 							<input type="text" name="userId" class="form-control"
 							placeholder="아이디입력" required><br/>
@@ -108,3 +119,8 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			const chattingOpen=()=>{
+				open("${path}/chattingpage","_blank","width=400, height=500");
+			}
+		</script>
